@@ -1,0 +1,602 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 255, 255, 255;
+  --background-rgb: 12, 12, 12;
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px; /* Accounts for fixed header */
+  --color-primary: #0C0C0C;
+  --color-secondary: #1a1a1a;
+  --color-accent: #FFD585;
+  --color-accent-light: #ffe2ad;
+  --color-light: #FFFFFF;
+  --color-dark: #0C0C0C;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: rgb(var(--background-rgb));
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+  will-change: transform;
+}
+
+/* Global text chromatic aberration - simplified for performance */
+h1, h2, h3, h4, h5, h6, p, a, button, li, span {
+  text-shadow: 
+    -0.5px 0 1px rgba(255, 213, 133, 0.3),
+    0.5px 0 1px rgba(255, 222, 158, 0.3);
+}
+
+/* Exceptions for elements that shouldn't have chromatic aberration */
+.no-chromatic, 
+.no-chromatic * {
+  text-shadow: none;
+}
+
+/* Ensure SVG elements don't get the effect */
+svg, 
+svg * {
+  text-shadow: none;
+}
+
+/* Optimized pseudo-elements with hardware acceleration */
+body::before,
+body::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 200;
+  mix-blend-mode: overlay;
+  opacity: 0.08;
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+body::before {
+  background-color: rgba(255, 213, 133, 0.5);
+  transform: translateX(-1px) translateZ(0);
+}
+
+body::after {
+  background-color: rgba(255, 222, 158, 0.5);
+  transform: translateX(1px) translateZ(0);
+}
+
+/* Grain effect overlay - optimized */
+.grain-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  pointer-events: none;
+  z-index: 100;
+  opacity: 0.3;
+  background-image: url("https://img.freepik.com/free-photo/noisy-background_1194-7547.jpg?t=st=1741761611~exp=1741765211~hmac=e8d8889696fe6d717b8ba506eb133c5c1c79304807e3ee063ac289f60dcf5801&w=900");
+  background-repeat: repeat;
+  background-size: 500px;
+  mix-blend-mode: overlay;
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Paper texture overlay - optimized */
+.grain-overlay::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-image: url("https://images.unsplash.com/photo-1637325258040-d2f09636ecf6?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+  background-size: cover;
+  opacity: 0.15;
+  mix-blend-mode: overlay;
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Chromatic aberration effect - optimized */
+.chromatic-aberration {
+  position: relative;
+  text-shadow: none;
+}
+
+.chromatic-aberration::before,
+.chromatic-aberration::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.chromatic-aberration::before {
+  text-shadow: -0.5px 0 1px rgba(255, 0, 0, 0.3);
+  animation: chromaticMove 15s ease-in-out infinite;
+  transform: translateZ(0);
+}
+
+.chromatic-aberration::after {
+  text-shadow: 0.5px 0 1px rgba(0, 255, 255, 0.3);
+  animation: chromaticMove 15s ease-in-out infinite reverse;
+  transform: translateZ(0);
+}
+
+@keyframes chromaticMove {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  25% { transform: translate3d(-0.3px, 0, 0); }
+  50% { transform: translate3d(0, 0.3px, 0); }
+  75% { transform: translate3d(0.3px, 0, 0); }
+}
+
+/* Polaroid Card Styling */
+.polaroid-card {
+  background-color: var(--color-dark);
+  border: 1px solid rgba(255, 213, 133, 0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  transform: rotate(0deg);
+  overflow: hidden;
+  height: 450px; /* Taller card */
+  max-width: 320px; /* Thinner card */
+  margin: 0 auto; /* Center the card */
+}
+
+.polaroid-card:hover {
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.4), 0 4px 6px rgba(0, 0, 0, 0.2);
+  transform: translateY(-5px) scale(1.02);
+  border: 1px solid rgba(255, 213, 133, 0.3);
+}
+
+.polaroid-card:nth-child(odd):hover {
+  transform: translateY(-5px) scale(1.02);
+}
+
+.polaroid-card:nth-child(even):hover {
+  transform: translateY(-5px) scale(1.02);
+}
+
+.polaroid-card .image-container {
+  height: 380px; /* Taller image container */
+  overflow: hidden;
+  position: relative;
+}
+
+.polaroid-card .card-content {
+  padding: 1rem;
+  background-color: var(--color-dark);
+  border-top: 1px solid rgba(255, 213, 133, 0.1);
+}
+
+.polaroid-card .card-brand {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-accent);
+  font-weight: 500;
+}
+
+.polaroid-card .card-title {
+  font-family: var(--font-playfair);
+  font-size: 1.25rem;
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+  color: var(--color-light);
+}
+
+.polaroid-card .card-category {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 0.75rem;
+}
+
+.polaroid-card .card-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: rgba(255, 255, 255, 0.7);
+  border-top: 1px solid rgba(255, 213, 133, 0.1);
+  padding-top: 0.75rem;
+}
+
+/* Animation for lightbox */
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.3s ease-out forwards;
+}
+
+/* Vox Animation Keyframes */
+@keyframes voxFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes voxFadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes voxFadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes voxFadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Animation Utility Classes */
+.vox-animate {
+  opacity: 0;
+}
+
+.vox-animate.vox-fade-in {
+  animation: voxFadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.vox-animate.vox-fade-in-left {
+  animation: voxFadeInLeft 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.vox-animate.vox-fade-in-right {
+  animation: voxFadeInRight 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.vox-animate.vox-fade-in-up {
+  animation: voxFadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.vox-delay-100 {
+  animation-delay: 100ms;
+}
+
+.vox-delay-200 {
+  animation-delay: 200ms;
+}
+
+.vox-delay-300 {
+  animation-delay: 300ms;
+}
+
+.vox-delay-400 {
+  animation-delay: 400ms;
+}
+
+.vox-delay-500 {
+  animation-delay: 500ms;
+}
+
+/* Vertical writing mode for Japanese text */
+.writing-vertical {
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  letter-spacing: 0.5em;
+  line-height: 1.8;
+}
+
+/* Performance optimized animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.8s ease forwards;
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.8s ease forwards;
+}
+
+.delay-200 {
+  animation-delay: 200ms;
+}
+
+.delay-300 {
+  animation-delay: 300ms;
+}
+
+.delay-400 {
+  animation-delay: 400ms;
+}
+
+.delay-500 {
+  animation-delay: 500ms;
+}
+
+/* Loader Animation */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loader {
+  border: 4px solid rgba(12, 12, 12, 0.3);
+  border-radius: 50%;
+  border-top: 4px solid #FFD585;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+@layer components {
+  .container-custom {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+  
+  .section-padding {
+    @apply py-16 sm:py-20 md:py-24;
+  }
+  
+  .heading-large {
+    @apply font-serif text-4xl sm:text-5xl md:text-6xl font-bold text-light bg-clip-text text-transparent bg-gold-gradient;
+  }
+  
+  .heading-medium {
+    @apply font-serif text-2xl sm:text-3xl md:text-4xl font-bold text-light;
+  }
+  
+  .body-text {
+    @apply font-sans text-base text-light/80;
+  }
+  
+  .button-primary {
+    @apply px-6 py-3 bg-accent text-dark font-medium rounded-md hover:bg-accent-light transition-all;
+  }
+  
+  .button-secondary {
+    @apply px-6 py-3 bg-transparent border border-accent text-accent font-medium rounded-md hover:bg-accent/10 transition-all;
+  }
+  
+  .button-small {
+    @apply px-4 py-2 text-sm font-medium rounded-md transition-all;
+  }
+}
+
+/* Gallery animations */
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-up {
+  animation: slideUp 0.5s ease-out forwards;
+}
+
+/* Section texture overlay for consistent appearance */
+.section-texture {
+  position: relative;
+}
+
+.section-texture::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("https://img.freepik.com/free-photo/noisy-background_1194-7547.jpg?t=st=1741761611~exp=1741765211~hmac=e8d8889696fe6d717b8ba506eb133c5c1c79304807e3ee063ac289f60dcf5801&w=900");
+  background-repeat: repeat;
+  background-size: 500px;
+  opacity: 0.1;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Ensure content is above the texture */
+.section-texture > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* Radial gradient for vignette effect */
+.bg-radial-gradient {
+  background: radial-gradient(circle, transparent 30%, var(--color-primary) 90%);
+}
+
+/* Subtle radial gradient for vignette effect */
+.bg-radial-gradient-subtle {
+  background: radial-gradient(circle, transparent 50%, var(--color-primary) 95%);
+}
+
+/* Scrolling feed animation */
+.scrolling-feed {
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.scrolling-feed-content {
+  display: inline-block;
+  white-space: nowrap;
+  animation: scrollText 30s linear infinite;
+  padding-left: 100%;
+}
+
+@keyframes scrollText {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.scrolling-feed-content span {
+  display: inline-block;
+  font-size: 0.875rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* Text animation effects */
+@keyframes textFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  20% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  80% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes textShimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
+
+.text-shimmer {
+  background: linear-gradient(
+    90deg,
+    currentColor 0%,
+    #fff 50%,
+    currentColor 100%
+  );
+  background-size: 200% auto;
+  color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+  animation: textShimmer 2s linear infinite;
+}
+
+/* Optimized blurry shader animations - reduced complexity */
+@keyframes slowShimmer {
+  0%, 100% {
+    background-position: 0% 0%;
+  }
+  50% {
+    background-position: 100% 100%;
+  }
+}
+
+@keyframes slowPulse {
+  0%, 100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+/* Optimized blurry shader - reduced complexity and improved performance */
+.blurry-shader {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  overflow: hidden;
+  pointer-events: none;
+  mix-blend-mode: overlay;
+  opacity: 0.7;
+}
+
+/* Single gradient instead of multiple layers */
+.blurry-shader::before {
+  content: "";
+  position: absolute;
+  inset: -25%;
+  width: 150%;
+  height: 150%;
+  background-image: radial-gradient(
+    circle at 50% 50%,
+    rgba(212, 175, 55, 0.35) 0%,
+    rgba(0, 0, 0, 0) 50%
+  );
+  filter: blur(40px);
+  animation: slowShimmer 60s ease-in-out infinite;
+  transform: translateZ(0);
+  will-change: background-position;
+}
+
+/* Removed the ::after pseudo-element to reduce rendering load */ 
